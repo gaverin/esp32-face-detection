@@ -1,0 +1,148 @@
+import argparse
+import json
+import math
+import shutil
+from pathlib import Path
+from random import Random
+
+
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
+DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "lfw-3class"
+DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "lfw-3class-split"
+DEFAULT_SEED = 42
+
+
+def _list_class_images(class_dir: Path) -> list[Path]:
+    return sorted(
+        path
+        for path in class_dir.iterdir()
+        if path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS
+    )
+
+
+def _compute_split_counts(
+    total: int,
+    train_ratio: float,
+    val_ratio: float,
+    test_ratio: float,
+) -> dict[str, int]:
+    if total < 3:
+        raise ValueError(
+            f"Need at least 3 images per class to create train/val/test splits, got {total}."
+        )
+
+    train_count = math.floor(total * train_ratio)
+    remaining = total - train_count
+    holdout_ratio = val_ratio + test_ratio
+    val_share = val_ratio / holdout_ratio
+    val_count = math.floor(remaining * val_share)
+    test_count = remaining - val_count
+
+    counts = {
+        "train": train_count,
+        "val": val_count,
+        "test": test_count,
+    }
+
+    missing_splits = [split for split, count in counts.items() if count == 0]
+    if missing_splits:
+        raise ValueError(
+            f"Split ratios produced empty splits for {missing_splits}; add more data or change ratios."
+        )
+
+    return counts
+
+
+def _validate_ratios(train_ratio: float, val_ratio: float, test_ratio: float) -> None:
+    total = train_ratio + val_ratio + test_ratio
+    if not math.isclose(total, 1.0, rel_tol=0.0, abs_tol=1e-9):
+        raise ValueError(f"Split ratios must sum to 1.0, got {total}.")
+    if min(train_ratio, val_ratio, test_ratio) <= 0:
+        raise ValueError("Split ratios must all be greater than zero.")
+
+
+def prepare_dataset(
+    source_dir: str | Path = DEFAULT_SOURCE_DIR,
+    output_dir: str | Path = DEFAULT_OUTPUT_DIR,
+    train_ratio: float = 0.7,
+    val_ratio: float = 0.15,
+    test_ratio: float = 0.15,
+    seed: int = DEFAULT_SEED,
+) -> dict[str, object]:
+    """Create deterministic train/val/test folder splits for Keras loaders.
+
+    The destination directory is deleted and rebuilt on every run so repeated
+    runs with the same seed produce a clean, reproducible output tree.
+    """
+
+    _validate_ratios(train_ratio, val_ratio, test_ratio)
+
+    source_path = Path(source_dir).resolve()
+    output_path = Path(output_dir).resolve()
+
+    if not source_path.exists():
+        raise FileNotFoundError(f"Source dataset directory not found: {source_path}")
+    if not source_path.is_dir():
+        raise NotADirectoryError(f"Source dataset path is not a directory: {source_path}")
+
+    class_dirs = sorted(path for path in source_path.iterdir() if path.is_dir())
+    if not class_dirs:
+        raise ValueError(f"No class directories found in {source_path}.")
+
+    rng = Random(seed)
+    class_images: dict[str, list[Path]] = {}
+    for class_dir in class_dirs:
+        images = _list_class_images(class_dir)
+        if not images:
+            raise ValueError(f"Class directory has no supported image files: {class_dir}")
+        class_images[class_dir.name] = images
+
+    if output_path.exists():
+        shutil.rmtree(output_path)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    summary: dict[str, object] = {
+        "source_dir": str(source_path),
+        "output_dir": str(output_path),
+        "seed": seed,
+        "ratios": {
+            "train": train_ratio,
+            "val": val_ratio,
+            "test": test_ratio,
+        },
+        "classes": {},
+    }
+
+    for class_name, images in class_images.items():
+        shuffled = list(images)
+        rng.shuffle(shuffled)
+        counts = _compute_split_counts(
+            total=len(shuffled),
+            train_ratio=train_ratio,
+            val_ratio=val_ratio,
+            test_ratio=test_ratio,
+        )
+
+        train_end = counts["train"]
+        val_end = train_end + counts["val"]
+        split_map = {
+            "train": shuffled[:train_end],
+            "val": shuffled[train_end:val_end],
+            "test": shuffled[val_end:],
+        }
+
+        class_summary = {
+            "total": len(images),
+            "train": len(split_map["train"]),
+            "val": len(split_map["val"]),
+            "test": len(split_map["test"]),
+        }
+        summary["classes"][class_name] = class_summary
+
+        for split_name, split_images in split_map.items():
+            destination_dir = output_path / split_name / class_name
+            destination_dir.mkdir(parents=True, exist_ok=True)
+            for image_path in split_images:
+                shutil.copy2(image_path, destination_dir / image_path.name)
+
+    return summary
