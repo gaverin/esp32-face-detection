@@ -7,17 +7,13 @@ from random import Random
 
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
-DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "lfw-3class"
-DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "lfw-3class-split"
+DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "dataset"
+DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "dataset-split"
 DEFAULT_SEED = 42
 
 
 def _list_class_images(class_dir: Path) -> list[Path]:
-    return sorted(
-        path
-        for path in class_dir.iterdir()
-        if path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS
-    )
+    return sorted(path for path in class_dir.iterdir() if path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS)
 
 
 def _compute_split_counts(
@@ -26,11 +22,14 @@ def _compute_split_counts(
     val_ratio: float,
     test_ratio: float,
 ) -> dict[str, int]:
+    
+    # check we have more than 3 images
     if total < 3:
         raise ValueError(
             f"Need at least 3 images per class to create train/val/test splits, got {total}."
         )
-
+    
+    # compute training, validationn and test sizes
     train_count = math.floor(total * train_ratio)
     remaining = total - train_count
     holdout_ratio = val_ratio + test_ratio
@@ -43,12 +42,6 @@ def _compute_split_counts(
         "val": val_count,
         "test": test_count,
     }
-
-    missing_splits = [split for split, count in counts.items() if count == 0]
-    if missing_splits:
-        raise ValueError(
-            f"Split ratios produced empty splits for {missing_splits}; add more data or change ratios."
-        )
 
     return counts
 
@@ -80,11 +73,12 @@ def prepare_dataset(
     source_path = Path(source_dir).resolve()
     output_path = Path(output_dir).resolve()
 
+    # check source and destination directories
     if not source_path.exists():
         raise FileNotFoundError(f"Source dataset directory not found: {source_path}")
     if not source_path.is_dir():
         raise NotADirectoryError(f"Source dataset path is not a directory: {source_path}")
-
+    # check dataset is not empty
     class_dirs = sorted(path for path in source_path.iterdir() if path.is_dir())
     if not class_dirs:
         raise ValueError(f"No class directories found in {source_path}.")
@@ -97,6 +91,7 @@ def prepare_dataset(
             raise ValueError(f"Class directory has no supported image files: {class_dir}")
         class_images[class_dir.name] = images
 
+    # rebuild output directory
     if output_path.exists():
         shutil.rmtree(output_path)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -113,6 +108,7 @@ def prepare_dataset(
         "classes": {},
     }
 
+    # shuffle images, compute split counts
     for class_name, images in class_images.items():
         shuffled = list(images)
         rng.shuffle(shuffled)
@@ -138,7 +134,8 @@ def prepare_dataset(
             "test": len(split_map["test"]),
         }
         summary["classes"][class_name] = class_summary
-
+        
+        # copy images into new folders
         for split_name, split_images in split_map.items():
             destination_dir = output_path / split_name / class_name
             destination_dir.mkdir(parents=True, exist_ok=True)

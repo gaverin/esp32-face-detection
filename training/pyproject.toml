@@ -1,7 +1,11 @@
 [project]
 name = "training"
 version = "0.1.0"
-description = "Training code for face-detectioon-model"
+description = "Training code for face-detection-model"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["tensorflow"]
+dependencies = [
+    "numpy>=2.2.6",
+    "pillow>=12.2.0",
+    "tensorflow",
+]
