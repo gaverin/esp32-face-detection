@@ -1,0 +1,12 @@
+{
+  "terminal.integrated.profiles.linux": {
+    "ESP-IDF (bash)": {
+      "path": "/bin/bash",
+      "args": ["-lc", "source ${config:idf.espIdfPath}/export.sh && exec bash -l"],
+      "env": {
+        "IDF_PYTHON_ENV_PATH": "${config:idf.toolsPath}/tools/python/v6.0/venv"
+      }
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "ESP-IDF (bash)"
+}

@@ -1,5 +1,6 @@
 import tensorflow as tf
 import keras
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 """
     Pretrained ResNet50 without its original classification head (include_top=False) act as a feature extractor
@@ -45,7 +46,21 @@ class Model:
             metrics=['accuracy']
         )
 
-    def train(self, train_ds, epochs, callbacks, val_ds):
+    def train(self, train_ds, epochs, val_ds):
+
+        checkpoint = ModelCheckpoint(
+            "models/face_classifier.keras",
+            monitor="val_loss",
+            mode="min",
+            save_best_only=True,
+        )
+        # EarlyStopping to find best model with a large number of epochs
+        earlystop = EarlyStopping(
+            monitor='val_loss',
+            restore_best_weights=True,
+            patience=3,  # number of epochs with no improvement after which training will be stopped
+        )
+        callbacks = [earlystop, checkpoint]
         
         history = self.face_classifier.fit(
             train_ds,
@@ -54,12 +69,23 @@ class Model:
             validation_data=val_ds
         )   
         
-        self.face_classifier.save("models/face_classifier.h5")
-
         print("Final training accuracy:", history.history['accuracy'][-1])
         print("Final validation accuracy:", history.history['val_accuracy'][-1])
 
+        self.trained_model = keras.models.load_model("models/face_classifier.keras")
+    
 
+    def evaluate(self, test_ds):
+        loss, acc = self.face_classifier.evaluate(test_ds, verbose=0)
+        print(f"Overall accuracy is {acc * 100:.2f}%")
+    
+
+    def export_to_tflite(model: keras.models.Model, enable_quantization: bool = True):
+        print('Converting to TensorFlow Lite model...')
+        converter = tf.lite.TFLiteConverter.from_keras_model(model)
+
+
+    
 
 
 
