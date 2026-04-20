@@ -1,6 +1,7 @@
 import tensorflow as tf
 import keras
 from keras.callbacks import EarlyStopping, ModelCheckpoint
+from utils import write_model_c_file, write_model_h_file
 
 """
     Pretrained ResNet50 without its original classification head (include_top=False) act as a feature extractor
@@ -10,9 +11,11 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
     The full model is then compiled with a loss function and optimizer, while callbacks like ModelCheckpoint and EarlyStopping monitor validation performance to save the best model and stop training early
 """
 
+MODEL_C_PATH = '../esp32/main/model.c'
+MODEL_H_PATH = '../esp32/main/model.h'
+
 class Model:
 
-        
 
     def __init__(self, lr, img_height=250, img_width=250, num_classes=3, activation_function='softmax'):
 
@@ -75,14 +78,64 @@ class Model:
         self.trained_model = keras.models.load_model("models/face_classifier.keras")
     
 
-    def evaluate(self, test_ds):
-        loss, acc = self.face_classifier.evaluate(test_ds, verbose=0)
+    def evaluate_model(self, test_ds):
+        _ , acc = self.trained_model.evaluate(test_ds, verbose=0)
         print(f"Overall accuracy is {acc * 100:.2f}%")
     
 
-    def export_to_tflite(model: keras.models.Model, enable_quantization: bool = True):
+    def export_model_to_tflite(self, train_ds, enable_quantization: bool = True):
         print('Converting to TensorFlow Lite model...')
-        converter = tf.lite.TFLiteConverter.from_keras_model(model)
+        converter = tf.lite.TFLiteConverter.from_keras_model(self.trained_model)
+        
+        if enable_quantization:
+            # Define the generator for the representative dataset
+            def representative_dataset():
+                for images, _ in train_ds.take(100):
+                    yield [images]
+
+            # Set up quantization parameters
+            converter.optimizations = [tf.lite.Optimize.DEFAULT]
+            converter.representative_dataset = representative_dataset
+            # Enforce full integer quantization
+            converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+            converter.inference_input_type = tf.int8
+            converter.inference_output_type = tf.int8
+
+        self.tflite_model = converter.convert()
+        
+        # Print quantization scale and zero point
+        if enable_quantization:
+            # Load model in interpreter
+            interpreter = tf.lite.Interpreter(model_content=self.tflite_model)
+            interpreter.allocate_tensors()
+
+            # Get input and output details
+            input_details = interpreter.get_input_details()
+            output_details = interpreter.get_output_details()
+
+            # Do print
+            print('Input scale:', input_details[0]['quantization'][0])
+            print('Input zero point:', input_details[0]['quantization'][1])
+            print('Output scale:', output_details[0]['quantization'][0])
+            print('Output zero point:', output_details[0]['quantization'][1])
+
+        # Export TensorFlow Lite model to C source files
+        print('Exporting TensorFlow Lite model to C source files...')
+        defines = {
+            'NUM_CLASSES': self.num_classes,
+            'IMG_WIDTH': self.img_width,
+            'IMG_HEIGHT': self.img_height
+        }
+        declarations = []
+        write_model_h_file(MODEL_H_PATH, defines, declarations)
+        write_model_c_file(MODEL_C_PATH, self.tflite_model)
+
+        # Save TensorFlow Lite model
+        with open('models/model.tflite', 'wb') as f:
+            f.write(self.tflite_model)
+
+        
+
 
 
     
