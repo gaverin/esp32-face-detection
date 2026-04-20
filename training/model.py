@@ -49,6 +49,8 @@ class Model:
             metrics=['accuracy']
         )
 
+        self.trained_model = None
+
     def train(self, train_ds, epochs, val_ds):
 
         checkpoint = ModelCheckpoint(
@@ -78,6 +80,9 @@ class Model:
         self.trained_model = keras.models.load_model("models/face_classifier.keras")
     
 
+    def get_last_trained_model(self):
+        return keras.models.load_model("models/face_classifier.keras")
+
     def evaluate_model(self, test_ds):
         _ , acc = self.trained_model.evaluate(test_ds, verbose=0)
         print(f"Overall accuracy is {acc * 100:.2f}%")
@@ -85,7 +90,13 @@ class Model:
 
     def export_model_to_tflite(self, train_ds, enable_quantization: bool = True):
         print('Converting to TensorFlow Lite model...')
-        converter = tf.lite.TFLiteConverter.from_keras_model(self.trained_model)
+        
+        if self.trained_model == None:
+            model = self.get_last_trained_model()
+        else:
+            model = self.trained_model
+        
+        converter = tf.lite.TFLiteConverter.from_keras_model(model)
         
         if enable_quantization:
             # Define the generator for the representative dataset
