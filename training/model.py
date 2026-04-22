@@ -33,16 +33,15 @@ class Model:
         )
 
         for layer in self.base_model.layers:
-            layer.trainable = False 
-        
-        global_avg_pooling = keras.layers.GlobalAveragePooling2D()(self.base_model.output)
-        output = keras.layers.Dense(self.num_classes, activation=activation_function)(global_avg_pooling)
+            layer.trainable = False
 
-        self.face_classifier = keras.models.Model(
-            inputs=self.base_model.input,
-            outputs=output,
-            name='ResNet50'
-        )
+        inputs = keras.Input(shape=(self.img_height, self.img_width, 3), dtype=tf.float32)
+        x = keras.applications.resnet.preprocess_input(inputs)
+        x = self.base_model(x, training=False)
+        x = keras.layers.GlobalAveragePooling2D()(x)
+        outputs = keras.layers.Dense(self.num_classes, activation=self.activation_function)(x)
+
+        self.face_classifier = keras.Model(inputs, outputs, name='ResNet50')
 
         self.face_classifier.compile(
             loss='categorical_crossentropy',
@@ -103,8 +102,8 @@ class Model:
         if enable_quantization:
             # Define the generator for the representative dataset
             def representative_dataset():
-                for images, _ in train_ds.take(100):
-                    yield [images]
+                for images, _ in train_ds.unbatch().shuffle(1000).batch(1).take(200):
+                    yield [tf.cast(images, tf.float32)]
 
             # Set up quantization parameters
             converter.optimizations = [tf.lite.Optimize.DEFAULT]
@@ -171,17 +170,20 @@ class Model:
         y_pred = []
 
         for images, labels in test_ds:
-            images = images.numpy()
+            images = images.numpy().astype(np.float32)
             labels = np.argmax(labels.numpy(), axis=1)
 
             # Quantize batch
             if input_scale > 0:
-                images_q = images / input_scale + input_zero_point
+                images_q = np.round(images / input_scale + input_zero_point)
+                images_q = np.clip(images_q, -128, 127).astype(np.int8)
             else:
-                images_q = images
+                images_q = images.astype(np.float32)
             
             # input_dtype is int8 as defined in the convertion method above
             images_q = np.clip(images_q, -128, 127).astype(np.int8)
+            # use when we do not quantize tflite model, Did this to check quantization bug that dropped accuracy of tflite model
+            #images_q = images.astype(np.float32)
             
             # Run inference per sample
             for i in range(images_q.shape[0]):
@@ -194,7 +196,7 @@ class Model:
                 output = interpreter.get_tensor(output_details[0]['index'])[0]
 
                 if output_scale > 0:
-                    output = (output - output_zero_point) * output_scale
+                    output = (output.astype(np.float32) - output_zero_point) * output_scale
 
                 pred = np.argmax(output)
 
