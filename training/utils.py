@@ -1,5 +1,6 @@
 import os
-
+from sklearn.metrics import confusion_matrix
+import numpy as np
 
 def write_model_h_file(path: str, defines: dict, declarations: list[str]):
     # Ensure that the folder exists
@@ -33,3 +34,33 @@ def write_model_c_file(path: str, tflite_model):
             if (i + 1) % 12 == 0:
                 c_file.write("\n")
         c_file.write("\n};\n")
+
+
+
+def print_confusion_matrix(y_true: np.ndarray, y_pred: np.ndarray, class_labels: list[str]):
+    # Count predictions in confusion matrix
+    num_classes = len(class_labels)
+    cm = confusion_matrix(y_true, y_pred, labels=range(num_classes))
+
+    # Determine column width
+    col_width = max(len(label) for label in class_labels) + 1
+    num_digits = len(str(np.max(cm)))
+    if (num_digits + 1) > col_width:
+        col_width = num_digits + 1
+    
+    # Print confusion matrix header
+    print('Confusion matrix (predicted as columns, actual as rows):')
+    print('--------------------------------------------------------')
+
+    # Print class labels for X axis
+    print(' ' * col_width, end='')
+    for label in class_labels:
+        print(f'{label:>{col_width}}', end='')
+    print()
+
+    # Print each row of the confusion matrix
+    for i in range(num_classes):
+        print(f'{class_labels[i]:>{col_width}}', end='')
+        for j in range(num_classes):
+            print(f'{cm[i, j]:>{col_width}}', end='')
+        print()

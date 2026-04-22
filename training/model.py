@@ -1,7 +1,8 @@
+import numpy as np
 import tensorflow as tf
 import keras
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from utils import write_model_c_file, write_model_h_file
+from utils import write_model_c_file, write_model_h_file, print_confusion_matrix
 
 """
     Pretrained ResNet50 without its original classification head (include_top=False) act as a feature extractor
@@ -50,8 +51,9 @@ class Model:
         )
 
         self.trained_model = None
+        self.tflite_model = None
 
-    def train(self, train_ds, epochs, val_ds):
+    def train(self, train_ds: tf.data.Dataset, epochs, val_ds: tf.data.Dataset):
 
         checkpoint = ModelCheckpoint(
             "models/face_classifier.keras",
@@ -81,21 +83,21 @@ class Model:
     
 
     def get_last_trained_model(self):
-        return keras.models.load_model("models/face_classifier.keras")
+        if self.trained_model == None:
+            return keras.models.load_model("models/face_classifier.keras")
+        else:
+            return self.trained_model
 
-    def evaluate_model(self, test_ds):
-        _ , acc = self.trained_model.evaluate(test_ds, verbose=0)
-        print(f"Overall accuracy is {acc * 100:.2f}%")
+    def evaluate_model(self, test_ds: tf.data.Dataset):
+        model = self.get_last_trained_model()
+        _ , acc = model.evaluate(test_ds, verbose=0)
+        print(f"Tensorflow Model Test Accuracy {acc * 100:.2f}%")
     
 
-    def export_model_to_tflite(self, train_ds, enable_quantization: bool = True):
+    def export_model_to_tflite(self, train_ds: tf.data.Dataset, enable_quantization: bool = True):
         print('Converting to TensorFlow Lite model...')
         
-        if self.trained_model == None:
-            model = self.get_last_trained_model()
-        else:
-            model = self.trained_model
-        
+        model = self.get_last_trained_model()        
         converter = tf.lite.TFLiteConverter.from_keras_model(model)
         
         if enable_quantization:
@@ -142,8 +144,73 @@ class Model:
         write_model_c_file(MODEL_C_PATH, self.tflite_model)
 
         # Save TensorFlow Lite model
-        with open('models/model.tflite', 'wb') as f:
+        with open('models/face_classifier.tflite', 'wb') as f:
             f.write(self.tflite_model)
+
+    def evaluate_tflite_model(self, test_ds: tf.data.Dataset):
+        # Load interpreter
+        if self.tflite_model == None:
+            interpreter = tf.lite.Interpreter(model_path="models/face_classifier.tflite")
+        else:
+            interpreter = tf.lite.Interpreter(model_content=self.tflite_model)
+
+        interpreter.allocate_tensors()
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
+        input_scale, input_zero_point = input_details[0]['quantization']
+        output_scale, output_zero_point = output_details[0]['quantization']
+
+        print("input shape:", input_details[0]["shape"])
+        print("input dtype:", input_details[0]["dtype"])
+        print("input quant:", input_details[0]["quantization"])
+        print("output dtype:", output_details[0]["dtype"])
+        print("output quant:", output_details[0]["quantization"])
+        print("class names:", test_ds.class_names)
+
+        y_true = []
+        y_pred = []
+
+        for images, labels in test_ds:
+            images = images.numpy()
+            labels = np.argmax(labels.numpy(), axis=1)
+
+            # Quantize batch
+            if input_scale > 0:
+                images_q = images / input_scale + input_zero_point
+            else:
+                images_q = images
+            
+            # input_dtype is int8 as defined in the convertion method above
+            images_q = np.clip(images_q, -128, 127).astype(np.int8)
+            
+            # Run inference per sample
+            for i in range(images_q.shape[0]):
+                interpreter.set_tensor(
+                    input_details[0]['index'],
+                    images_q[i:i+1]
+                )
+                interpreter.invoke()
+
+                output = interpreter.get_tensor(output_details[0]['index'])[0]
+
+                if output_scale > 0:
+                    output = (output - output_zero_point) * output_scale
+
+                pred = np.argmax(output)
+
+                y_pred.append(pred)
+                y_true.append(labels[i])
+
+        y_true = np.array(y_true)
+        y_pred = np.array(y_pred)
+
+        accuracy = np.mean(y_true == y_pred)
+
+        print(f"\nTFlite Model Test Accuracy: {accuracy * 100:.4f}%\n")
+
+        class_names = test_ds.class_names
+        print_confusion_matrix(y_true, y_pred, class_names)
+
 
         
 
