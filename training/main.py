@@ -14,22 +14,22 @@ from model import Model
 AUTOTUNE = tf.data.AUTOTUNE
 
 # dataset paths
-train_image_folder = os.path.join('data', 'dataset-split', 'train')
-test_image_folder = os.path.join('data','dataset-split', 'test')
-val_image_folder = os.path.join('data','dataset-split', 'val')
+train_image_folder = os.path.join('data', 'og_data_split', 'train')
+test_image_folder = os.path.join('data','og_data_split', 'test')
+val_image_folder = os.path.join('data','og_data_split', 'val')
 
 
 
 # In the lfw dataset each image is a 250x250 jpg detected and centered using the openCV implementation of Viola-Jones
-IMG_HEIGHT = 250
-IMG_WIDTH = 250
+IMG_HEIGHT = 240
+IMG_WIDTH = 320
 
 # Training settings
 NUM_CLASSES = 3 
 BATCH_SIZE = 16
 LR = 0.01 # learning rate, should be less than 1.0 and greater than 10^-6. A traditional default value for the learning rate is 0.1 or 0.01
 ACTIVATION_FUNCTION = 'softmax'
-EPOCHS = 100
+EPOCHS = 50
 
 # Load datasets
 train_ds = keras.preprocessing.image_dataset_from_directory(
