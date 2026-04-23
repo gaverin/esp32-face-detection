@@ -18,7 +18,7 @@ MODEL_H_PATH = '../esp32/main/model.h'
 class Model:
 
 
-    def __init__(self, lr, img_height=250, img_width=250, num_classes=3, activation_function='softmax'):
+    def __init__(self, lr, img_height=240, img_width=320, num_classes=3, activation_function='softmax'):
 
         self.img_height = img_height
         self.img_width = img_width
@@ -26,7 +26,7 @@ class Model:
         self.activation_function = activation_function
         self.learning_rate = lr
 
-        self.base_model = keras.applications.ResNet50(
+        self.base_model = keras.applications.MobileNetV2(
             weights='imagenet',
             include_top=False,
             input_shape=(self.img_height, self.img_width, 3)
@@ -36,12 +36,12 @@ class Model:
             layer.trainable = False
 
         inputs = keras.Input(shape=(self.img_height, self.img_width, 3), dtype=tf.float32)
-        x = keras.applications.resnet.preprocess_input(inputs)
+        x = keras.applications.mobilenet_v2.preprocess_input(inputs)
         x = self.base_model(x, training=False)
         x = keras.layers.GlobalAveragePooling2D()(x)
         outputs = keras.layers.Dense(self.num_classes, activation=self.activation_function)(x)
 
-        self.face_classifier = keras.Model(inputs, outputs, name='ResNet50')
+        self.face_classifier = keras.Model(inputs, outputs, name='MobileNetV2')
 
         self.face_classifier.compile(
             loss='categorical_crossentropy',

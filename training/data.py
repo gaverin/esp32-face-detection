@@ -7,8 +7,8 @@ from random import Random
 
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
-DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "data" / "dataset"
-DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "data" / "dataset-split"
+DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "data" / "og_data"
+DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "data" / "og_data_split"
 DEFAULT_SEED = 42
 
 
@@ -184,4 +184,5 @@ def rename_images(path):
 
 if __name__ == "__main__":
     
-    rename_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")
+    #rename_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")
+    prepare_dataset()
