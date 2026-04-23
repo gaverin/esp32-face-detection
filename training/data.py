@@ -7,8 +7,8 @@ from random import Random
 
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
-DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "dataset"
-DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "dataset-split"
+DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "data" / "dataset"
+DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "data" / "dataset-split"
 DEFAULT_SEED = 42
 
 
@@ -143,3 +143,45 @@ def prepare_dataset(
                 shutil.copy2(image_path, destination_dir / image_path.name)
 
     return summary
+
+
+def rename_images(path):
+    """
+    Loop through subdirectories of the provided path. Each subdirectory
+    represents a class for an ML problem.
+
+    Rename all supported images in each subdirectory using the naming rule:
+    <subdir_name>_0001.png, <subdir_name>_0002.png, and so on.
+    """
+
+    root_path = Path(path).resolve()
+
+    if not root_path.exists():
+        raise FileNotFoundError(f"Dataset directory not found: {root_path}")
+    if not root_path.is_dir():
+        raise NotADirectoryError(f"Dataset path is not a directory: {root_path}")
+
+    class_dirs = sorted(class_dir for class_dir in root_path.iterdir() if class_dir.is_dir())
+    summary: dict[str, int] = {}
+
+    for class_dir in class_dirs:
+        images = _list_class_images(class_dir)
+        temp_paths: list[Path] = []
+
+        for index, image_path in enumerate(images, start=1):
+            temp_path = class_dir / f".__rename_images_tmp_{index:04d}{image_path.suffix.lower()}"
+            image_path.rename(temp_path)
+            temp_paths.append(temp_path)
+
+        for index, temp_path in enumerate(temp_paths, start=1):
+            target_path = class_dir / f"{class_dir.name}_{index:04d}.png"
+            temp_path.rename(target_path)
+
+        summary[class_dir.name] = len(images)
+
+    return summary
+
+
+if __name__ == "__main__":
+    
+    rename_images("/Users/gab/repos/esp32-face-detection/training/og_data")

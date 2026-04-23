@@ -1,6 +1,6 @@
 training/__pycache__/
 training/models
-training/dataset*
+training/data/*
 
 
 esp32/.vscode/

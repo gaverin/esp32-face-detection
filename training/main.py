@@ -14,9 +14,9 @@ from model import Model
 AUTOTUNE = tf.data.AUTOTUNE
 
 # dataset paths
-train_image_folder = os.path.join('dataset-split', 'train')
-test_image_folder = os.path.join('dataset-split', 'test')
-val_image_folder = os.path.join('dataset-split', 'val')
+train_image_folder = os.path.join('data', 'dataset-split', 'train')
+test_image_folder = os.path.join('data','dataset-split', 'test')
+val_image_folder = os.path.join('data','dataset-split', 'val')
 
 
 
