@@ -1,7 +1,5 @@
 training/__pycache__/
-training/models
-training/data/*
-
+training/models/*
 
 esp32/.vscode/
 esp32/main/model.c

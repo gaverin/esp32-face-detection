@@ -184,4 +184,4 @@ def rename_images(path):
 
 if __name__ == "__main__":
     
-    rename_images("/Users/gab/repos/esp32-face-detection/training/og_data")
+    rename_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")
