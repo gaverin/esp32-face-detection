@@ -6,12 +6,12 @@
 #include "tensorflow/lite/micro/micro_interpreter.h"
 
 // Tensor arena size, found by trial and error
-#define TENSOR_ARENA_SIZE (30 * 1024)
+#define TENSOR_ARENA_SIZE (600 * 1024)
 
 // Static variables
 static const tflite::Model *model = nullptr;
 static tflite::MicroInterpreter *interpreter = nullptr;
-alignas(16) static uint8_t tensor_arena[TENSOR_ARENA_SIZE];
+//alignas(16) static uint8_t tensor_arena[TENSOR_ARENA_SIZE];
 static TfLiteTensor *input = nullptr;
 static TfLiteTensor *output = nullptr;
 static const char *TAG_INF = "Inference";
@@ -32,7 +32,7 @@ bool classifier_init()
         return false;
     }
     // Create an interpreter
-    static tflite::MicroMutableOpResolver<9> micro_op_resolver;
+    static tflite::MicroMutableOpResolver<12> micro_op_resolver;
 
     // 1. Convolutional Ops    
     micro_op_resolver.AddConv2D();
@@ -52,6 +52,8 @@ bool classifier_init()
     // 7. Quantization Ops (Crucial for INT8 TFLite models)
     micro_op_resolver.AddQuantize();
     micro_op_resolver.AddDequantize();
+    // 8. Multiplication
+    micro_op_resolver.AddMul();
 
     static tflite::MicroInterpreter static_interpreter(model, micro_op_resolver, tensor_arena, TENSOR_ARENA_SIZE);
     interpreter = &static_interpreter;

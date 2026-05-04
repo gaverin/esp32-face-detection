@@ -40,7 +40,7 @@ void setup()
     }
 
     // Initialize inference
-    if (!inference_init())
+    if (!classifier_init())
     {
         ESP_LOGE(TAG_INF, "Failed to initialize inference!");
         abort();
