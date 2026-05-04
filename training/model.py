@@ -12,8 +12,8 @@ from utils import write_model_c_file, write_model_h_file, print_confusion_matrix
     The full model is then compiled with a loss function and optimizer, while callbacks like ModelCheckpoint and EarlyStopping monitor validation performance to save the best model and stop training early
 """
 
-MODEL_C_PATH = '../esp32/main/model.c'
-MODEL_H_PATH = '../esp32/main/model.h'
+MODEL_C_PATH = '../inference/esp32/main/model.c'
+MODEL_H_PATH = '../inference/esp32/main/model.h'
 
 class Model:
 
@@ -212,13 +212,3 @@ class Model:
 
         class_names = test_ds.class_names
         print_confusion_matrix(y_true, y_pred, class_names)
-
-
-        
-
-
-
-    
-
-
-
