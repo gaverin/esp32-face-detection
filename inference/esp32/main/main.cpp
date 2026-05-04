@@ -6,7 +6,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "nvs_flash.h"
-#include "driver/usb_serial_jtag.h"
 #include "esp_log.h"
 
 // Project includes
@@ -36,26 +35,16 @@ void setup()
 
     // Initialize camera
     if (!camera_init()) {
+        ESP_LOGE(TAG_INF, "Failed to initialize camera!");
         abort();
     }
 
-    // Initialize USB serial
-    usb_serial_jtag_driver_config_t cfg = {
-        .tx_buffer_size = 512,
-        .rx_buffer_size = 512,
-    };
-    err = usb_serial_jtag_driver_install(&cfg);
-    ESP_ERROR_CHECK(err);
-
-    // Wait for incoming S on serial port
-    printf("Send 'S' to start.\n");
-    char c;
-    do {
-        int r = usb_serial_jtag_read_bytes(&c, 1, portMAX_DELAY);
-        if (r < 0) {
-            abort();
-        }
-    } while (c != 'S');
+    // Initialize inference
+    if (!inference_init())
+    {
+        ESP_LOGE(TAG_INF, "Failed to initialize inference!");
+        abort();
+    }
 }
 
 void loop(void)

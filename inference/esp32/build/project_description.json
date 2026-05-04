@@ -1,7 +1,7 @@
 {
     "version":            "1.3",
     "project_name":       "camera",
-    "project_version":    "06ddc3d-dirty",
+    "project_version":    "7348ebb-dirty",
     "project_path":       "/Users/gab/repos/esp32-face-detection/inference/esp32",
     "idf_path":           "/Users/gab/.espressif/v6.0/esp-idf",
     "build_dir":          "/Users/gab/repos/esp32-face-detection/inference/esp32/build",
