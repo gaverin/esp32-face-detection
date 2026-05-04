@@ -7,10 +7,13 @@
 #include "freertos/task.h"
 #include "nvs_flash.h"
 #include "driver/usb_serial_jtag.h"
+#include "esp_log.h"
 
 // Project includes
 #include "camera.h"
 #include "inference.h"
+#include "model.h"
+
 
 // Static constants and variables
 //static const char* PREDICTION_PREAMBLE = "\n===PREDICTION===\n";
@@ -60,9 +63,9 @@ void loop(void)
     // Capture frame into tensor
     if (camera_capture_frame(image_buffer)) {
   
-        classifier_put_image(image_buffer)
+        classifier_put_image(image_buffer);
 
-        if (!inference_predict(prediction))
+        if (!classifier_predict(prediction))
         {
             ESP_LOGE(TAG_INF, "Failed to invoke interpreter!");
         }
@@ -83,7 +86,7 @@ void loop(void)
 extern "C" void app_main()
 {
     setup();
-    classifier_init()
+    classifier_init();
     while (true) {
         loop();
     }

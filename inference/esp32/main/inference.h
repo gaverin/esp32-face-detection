@@ -1,3 +1,3 @@
-bool inference_init();
-int8_t* inference_put_features(const float *features);
-bool inference_predict(float *prediction);
+bool classifier_init();
+int8_t* classifier_put_image(const uint8_t *image_buffer);
+bool classifier_predict(float *prediction);
