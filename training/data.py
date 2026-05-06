@@ -5,6 +5,7 @@ import shutil
 from pathlib import Path
 from random import Random
 
+from PIL import Image
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
 DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "data" / "og_data"
@@ -181,8 +182,60 @@ def rename_images(path):
 
     return summary
 
+def resize_images(path):
+    source_path = Path(path).resolve()
+    output_path = source_path.parent / f"{source_path.name}_224x224"
+    target_size = (224, 224)
+
+    if not source_path.exists():
+        raise FileNotFoundError(f"Dataset directory not found: {source_path}")
+    if not source_path.is_dir():
+        raise NotADirectoryError(f"Dataset path is not a directory: {source_path}")
+
+    if output_path.exists():
+        shutil.rmtree(output_path)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    summary: dict[str, int] = {}
+
+    for class_dir in sorted(class_dir for class_dir in source_path.iterdir() if class_dir.is_dir()):
+        destination_dir = output_path / class_dir.name
+        destination_dir.mkdir(parents=True, exist_ok=True)
+
+        processed_count = 0
+        for image_path in _list_class_images(class_dir):
+            destination_path = destination_dir / image_path.name
+
+            with Image.open(image_path) as image:
+                width, height = image.size
+                if (width, height) == target_size:
+                    shutil.copy2(image_path, destination_path)
+                else:
+                    if width < target_size[0] or height < target_size[1]:
+                        raise ValueError(
+                            f"Image is smaller than {target_size[0]}x{target_size[1]} and cannot be center-cropped: {image_path}"
+                        )
+
+                    left = (width - target_size[0]) // 2
+                    top = (height - target_size[1]) // 2
+                    cropped = image.crop((left, top, left + target_size[0], top + target_size[1]))
+                    cropped.save(destination_path)
+
+            processed_count += 1
+
+        summary[class_dir.name] = processed_count
+
+    return {
+        "source_dir": str(source_path),
+        "output_dir": str(output_path),
+        "target_size": target_size,
+        "classes": summary,
+    }
+
+
 
 if __name__ == "__main__":
     
     #rename_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")
-    prepare_dataset()
+    #prepare_dataset()
+    resize_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")
