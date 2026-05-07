@@ -4,7 +4,7 @@ from pathlib import Path
 import keras
 import numpy as np
 import tensorflow as tf
-from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 from utils import print_confusion_matrix, write_files
 
@@ -38,16 +38,6 @@ class Model:
         for layer in self.base_model.layers:
             layer.trainable = False
 
-        self.augmentation = keras.Sequential(
-            [
-                keras.layers.RandomFlip("horizontal"),
-                keras.layers.RandomRotation(0.1),
-                keras.layers.RandomZoom(0.1),
-                keras.layers.RandomBrightness(0.2),
-            ],
-            name="training_augmentation",
-        )
-
         inputs = keras.Input(shape=(self.img_height, self.img_width, 3), dtype=tf.float32)
         x = keras.applications.mobilenet_v2.preprocess_input(inputs)
         x = self.base_model(x, training=False)
@@ -56,26 +46,21 @@ class Model:
         outputs = keras.layers.Dense(self.num_classes)(x)
 
         self.face_classifier = keras.Model(inputs, outputs, name="MobileNetV2")
-        self._compile_model(self.face_classifier, learning_rate=self.learning_rate)
+        self.face_classifier.compile(
+            loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            optimizer=keras.optimizers.Adam(learning_rate=self.learning_rate),
+            metrics=["accuracy"],
+        )
 
         self.trained_model = None
         self.tflite_model = None
-
-    def _compile_model(self, model: keras.Model, learning_rate: float):
-        model.compile(
-            loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
-            metrics=["accuracy"],
-        )
 
     def _prepare_dataset(self, dataset: tf.data.Dataset, training: bool = False):
         autotune = tf.data.AUTOTUNE
 
         def map_batch(images, labels):
             images = tf.cast(images, tf.float32)
-            if training:
-                images = self.augmentation(images, training=True)
-            labels = self._labels_to_sparse(labels)
+            labels = tf.cast(labels, tf.int32)
             return images, labels
 
         prepared_ds = dataset.map(map_batch, num_parallel_calls=autotune).prefetch(autotune)
@@ -85,21 +70,16 @@ class Model:
 
         return prepared_ds
 
-    def _labels_to_sparse(self, labels):
-        labels = tf.convert_to_tensor(labels)
+    def _get_class_names(self, dataset: tf.data.Dataset):
+        if hasattr(dataset, "class_names"):
+            return dataset.class_names
+        return [str(index) for index in range(self.num_classes)]
 
-        if labels.shape.rank is not None and labels.shape.rank > 1:
-            return tf.argmax(labels, axis=-1, output_type=tf.int32)
+    def train(self, train_ds: tf.data.Dataset, epochs, val_ds: tf.data.Dataset):
 
-        if labels.dtype.is_floating:
-            labels = tf.cast(tf.round(labels), tf.int32)
-        else:
-            labels = tf.cast(labels, tf.int32)
-
-        return tf.reshape(labels, [-1])
-
-    def _build_callbacks(self):
-        return [
+        prepared_train_ds = self._prepare_dataset(train_ds, training=True)
+        prepared_val_ds = self._prepare_dataset(val_ds, training=False)
+        callbacks = [
             EarlyStopping(
                 monitor="val_loss",
                 restore_best_weights=True,
@@ -111,40 +91,7 @@ class Model:
                 mode="min",
                 save_best_only=True,
             ),
-            ReduceLROnPlateau(
-                monitor="val_loss",
-                patience=3,
-                factor=0.5,
-            ),
         ]
-
-    def _fine_tune(self, train_ds: tf.data.Dataset, val_ds: tf.data.Dataset, epochs: int):
-        base = self.face_classifier.get_layer("mobilenetv2_backbone")
-        base.trainable = True
-
-        for layer in base.layers[:-30]:
-            layer.trainable = False
-
-        self._compile_model(self.face_classifier, learning_rate=1e-5)
-
-        fine_tune_epochs = max(1, epochs // 3)
-        self.face_classifier.fit(
-            train_ds,
-            epochs=fine_tune_epochs,
-            validation_data=val_ds,
-            callbacks=self._build_callbacks(),
-        )
-
-    def _get_class_names(self, dataset: tf.data.Dataset):
-        if hasattr(dataset, "class_names"):
-            return dataset.class_names
-        return [str(index) for index in range(self.num_classes)]
-
-    def train(self, train_ds: tf.data.Dataset, epochs, val_ds: tf.data.Dataset):
-
-        prepared_train_ds = self._prepare_dataset(train_ds, training=True)
-        prepared_val_ds = self._prepare_dataset(val_ds, training=False)
-        callbacks = self._build_callbacks()
 
         history = self.face_classifier.fit(
             prepared_train_ds,
@@ -152,8 +99,6 @@ class Model:
             callbacks=callbacks,
             validation_data=prepared_val_ds,
         )
-
-        self._fine_tune(prepared_train_ds, prepared_val_ds, epochs)
 
         print("Final training accuracy:", history.history["accuracy"][-1])
         print("Final validation accuracy:", history.history["val_accuracy"][-1])
@@ -240,7 +185,7 @@ class Model:
         for images, labels in test_ds:
             images = tf.cast(images, tf.float32)
             images = images.numpy()
-            labels = self._labels_to_sparse(labels).numpy()
+            labels = tf.cast(labels, tf.int32).numpy()
 
             if input_scale > 0:
                 images_q = np.round(images / input_scale + input_zero_point)
