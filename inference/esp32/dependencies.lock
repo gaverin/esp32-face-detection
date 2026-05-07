@@ -55,6 +55,6 @@ direct_dependencies:
 - espressif/esp-tflite-micro
 - espressif/esp32-camera
 - idf
-manifest_hash: ff261dc4379e75130372a984f788dc6f9d3f3e04d7c590be67d40a987098fc2f
+manifest_hash: c0301a3c7fc0bfdac39aca5b7af24e6b7aa4be6dfbf59a6f8393d6fff25d5c3d
 target: esp32s3
 version: 3.0.0

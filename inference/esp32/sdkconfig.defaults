@@ -1,3 +1,53 @@
+# sdkconfig.defaults – applied automatically by idf.py build
+# Tune for ESP32-S3 with PSRAM (OPI/Quad) and TFLite inference
+
+# ── Target ────────────────────────────────────────────────────────────────────
 CONFIG_IDF_TARGET="esp32s3"
-CONFIG_SPIRAM=y
-CONFIG_SPIRAM_MODE_OCT=y
+
+# ── PSRAM (required for camera frame buffers + TFLite arena) ─────────────────
+CONFIG_ESP32S3_SPIRAM_SUPPORT=y
+CONFIG_SPIRAM_MODE_OCT=y             # OPI PSRAM (S3-CAM boards)
+# CONFIG_SPIRAM_MODE_QUAD=y          # use this for quad-PSRAM boards instead
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_SPIRAM_USE_MALLOC=y
+CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL=16384
+CONFIG_SPIRAM_ALLOW_STACK_EXTERNAL_MEMORY=y
+
+# ── Flash ─────────────────────────────────────────────────────────────────────
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+
+# ── Main task stack (TFLite inference needs space) ────────────────────────────
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# ── Serial ────────────────────────────────────────────────────────────────────
+CONFIG_ESP_CONSOLE_UART_BAUDRATE=115200
+
+# ── Power / CPU frequency ─────────────────────────────────────────────────────
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+# ── Compiler optimisation (speed, not size, for inference) ───────────────────
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+CONFIG_COMPILER_OPTIMIZATION_ASSERTIONS_DISABLE=y
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+
+# ── Move read-only data & static initializers to flash (saves ~200KB DRAM) ───
+CONFIG_ESP32S3_INSTRUCTION_CACHE_16KB=y
+CONFIG_ESP32S3_DATA_CACHE_LINE_64B=y
+CONFIG_SPIRAM_RODATA=y
+CONFIG_SPIRAM_FETCH_INSTRUCTIONS=y
+
+# ── Reduce DRAM usage from IDF components ────────────────────────────────────
+CONFIG_LWIP_IRAM_OPTIMIZATION=n
+CONFIG_ESP_WIFI_IRAM_OPT=n
+CONFIG_ESP_WIFI_RX_IRAM_OPT=n
+CONFIG_SPI_FLASH_ROM_DRIVER_PATCH=n
+
+# ── TFLite: allow rodata in flash (default for const arrays, belt-and-suspenders)
+CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240=y
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"

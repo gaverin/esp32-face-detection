@@ -17,4 +17,4 @@ set confirm off
 set confirm on
 
 # Load application symbols
-file /Users/gab/repos/esp32-face-detection/inference/esp32/build/camera.elf
+file /Users/gab/repos/esp32-face-detection/inference/esp32/build/esp32s3_cam_classifier.elf

@@ -27,7 +27,7 @@ IMG_WIDTH = 224
 # Training settings
 NUM_CLASSES = 3 
 BATCH_SIZE = 16
-LR = 0.01 # learning rate, should be less than 1.0 and greater than 10^-6. A traditional default value for the learning rate is 0.1 or 0.01
+LR = 0.001 # matches the reference head-training phase before fine-tuning
 ACTIVATION_FUNCTION = 'softmax'
 EPOCHS = 50
 
@@ -35,7 +35,7 @@ EPOCHS = 50
 train_ds = keras.preprocessing.image_dataset_from_directory(
     train_image_folder,
     image_size=(IMG_HEIGHT, IMG_WIDTH),
-    label_mode='categorical',
+    label_mode='int',
     batch_size=BATCH_SIZE,
     shuffle=True
 )
@@ -43,7 +43,7 @@ train_ds = keras.preprocessing.image_dataset_from_directory(
 val_ds = keras.preprocessing.image_dataset_from_directory(
     val_image_folder,
     image_size=(IMG_HEIGHT, IMG_WIDTH),
-    label_mode='categorical',
+    label_mode='int',
     batch_size=BATCH_SIZE,
     shuffle=False
 )
@@ -51,7 +51,7 @@ val_ds = keras.preprocessing.image_dataset_from_directory(
 test_ds = keras.preprocessing.image_dataset_from_directory(
     test_image_folder,
     image_size=(IMG_HEIGHT, IMG_WIDTH),
-    label_mode='categorical',
+    label_mode='int',
     batch_size=BATCH_SIZE,
     shuffle=False
 )
@@ -65,5 +65,4 @@ face_classifier.train(train_ds=train_ds, epochs=EPOCHS, val_ds=val_ds)
 face_classifier.evaluate_model(test_ds=test_ds)
 face_classifier.export_model_to_tflite(train_ds=train_ds)
 face_classifier.evaluate_tflite_model(test_ds=test_ds)
-
 

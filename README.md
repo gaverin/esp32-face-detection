@@ -5,25 +5,39 @@ This project trains a small face classifier in TensorFlow/Keras and exports it f
 ## What It Includes
 
 - `training/`: dataset preparation, model training, evaluation, and TensorFlow Lite export
-- `esp32/main/`: camera code and generated model files for the embedded app
-- `training/dataset-split/`: train, validation, and test folders used by the training pipeline
+- `python/`: reference Python workflow used to generate the embedded model assets
+- `inference/esp32/main/`: camera code and generated model files for the embedded app
+- `training/data/og_data_split/`: train, validation, and test folders used by the training pipeline
 
 ## Model Pipeline
 
-The training code uses a frozen `ResNet50` backbone with a small classification head for 3 classes.  
+The training code uses a MobileNetV2-based classifier for 3 classes.  
 After training, the model is converted to an `int8` TensorFlow Lite model and exported to:
 
-- `training/models/model.tflite`
-- `esp32/main/model.c`
-- `esp32/main/model.h`
+- `training/models/face_classifier.tflite`
+- `inference/esp32/main/model_data.cc`
+- `inference/esp32/main/model_data.h`
 
-## Run
+## Usage
 
-From `training/`, run:
+1. Change into the `python/` folder and run the Python entry point:
 
 ```bash
+cd python
 python main.py
 ```
 
-This loads the dataset, trains or loads the latest saved model, and exports the TFLite model for the ESP32 project.
-esp32/main/model.c
+2. Change back out and build the ESP32 firmware:
+
+```bash
+cd ../inference/esp32
+idf.py build
+```
+
+3. Flash the device and open the serial monitor:
+
+```bash
+idf.py flash monitor
+```
+
+This workflow generates the model assets first, then rebuilds and flashes the ESP32 application with the updated model.

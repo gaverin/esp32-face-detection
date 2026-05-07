@@ -1,0 +1,42 @@
+Command: cmake -G Ninja -B /Users/gab/repos/esp32-face-detection/inference/esp32/build -DPYTHON_DEPS_CHECKED=1 -DPYTHON=/Users/gab/.espressif/tools/python/v6.0/venv/bin/python -DESP_PLATFORM=1 -DCCACHE_ENABLE=False /Users/gab/repos/esp32-face-detection/inference/esp32
+Configuration Report                                                                                                        
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+   Parser Version: 1                                                                                                        
+   Verbosity: default                                                                                                       
+   Defaults policy: sdkconfig                                                                                               
+   Status: Finished with notifications                                                                                      
+                                                                                                                            
+  Miscellaneous                                                                                                             
+   ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────   
+    * Choice ESP_DEFAULT_CPU_FREQ_MHZ has multiple active selections. The last one will be used:                            
+    ESP_DEFAULT_CPU_FREQ_MHZ_240.                                                                                           
+   ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────   
+  Disabled Symbols/Choices With User-Set Value                                                                              
+   ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────   
+    * IDF_TARGET (defined at /Users/gab/.espressif/v6.0/esp-idf/Kconfig:68) with user-set value esp32s3 from                
+    /var/folders/9n/t0r10lzd0gnfsr9z0svl_k3c0000gn/T/kconfgen_tmpxw7x52sf                                                   
+    * PARTITION_TABLE_FILENAME (defined at                                                                                  
+    /Users/gab/.espressif/v6.0/esp-idf/components/partition_table/Kconfig.projbuild:137) with user-set value                
+    partitions.csv from /var/folders/9n/t0r10lzd0gnfsr9z0svl_k3c0000gn/T/kconfgen_tmpxw7x52sf                               
+    * ESP_CONSOLE_UART_BAUDRATE (defined at /Users/gab/.espressif/v6.0/esp-idf/components/esp_stdio/Kconfig:150) with       
+    user-set value 115200 from /var/folders/9n/t0r10lzd0gnfsr9z0svl_k3c0000gn/T/kconfgen_tmpxw7x52sf                        
+   ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────   
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+CMake Deprecation Warning at managed_components/espressif__esp-nn/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at managed_components/espressif__esp-tflite-micro/CMakeLists.txt:3 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+

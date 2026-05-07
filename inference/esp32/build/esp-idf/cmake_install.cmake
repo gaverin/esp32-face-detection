@@ -709,22 +709,22 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/gab/repos/esp32-face-detection/inference/esp32/build/esp-idf/espressif__esp-nn/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("/Users/gab/repos/esp32-face-detection/inference/esp32/build/esp-idf/espressif__esp-tflite-micro/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
   include("/Users/gab/repos/esp32-face-detection/inference/esp32/build/esp-idf/espressif__esp_jpeg/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
   include("/Users/gab/repos/esp32-face-detection/inference/esp32/build/esp-idf/espressif__esp32-camera/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/Users/gab/repos/esp32-face-detection/inference/esp32/build/esp-idf/espressif__esp-nn/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/Users/gab/repos/esp32-face-detection/inference/esp32/build/esp-idf/espressif__esp-tflite-micro/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)

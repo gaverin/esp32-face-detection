@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from sklearn.metrics import confusion_matrix
 import numpy as np
 
@@ -34,6 +35,31 @@ def write_model_c_file(path: str, tflite_model):
             if (i + 1) % 12 == 0:
                 c_file.write("\n")
         c_file.write("\n};\n")
+
+
+def write_files(tflite_path: Path, cc_path: Path, h_path: Path) -> None:
+    data = tflite_path.read_bytes()
+    h_path.write_text(
+        "#pragma once\n"
+        "#include <stdint.h>\n\n"
+        "extern const uint8_t g_model_data[];\n"
+        "extern const uint32_t g_model_data_len;\n",
+        encoding="utf-8",
+    )
+    lines = []
+    for i in range(0, len(data), 12):
+        chunk = data[i:i + 12]
+        lines.append("  " + ", ".join(f"0x{b:02x}" for b in chunk) + ",")
+    cc_path.write_text(
+        "// Auto-generated. Do not edit by hand.\n"
+        "#include \"model_data.h\"\n"
+        "#include <stdint.h>\n\n"
+        "const uint8_t g_model_data[] = {\n"
+        + "\n".join(lines)
+        + "\n};\n\n"
+        + f"const uint32_t g_model_data_len = {len(data)};\n",
+        encoding="utf-8",
+    )
 
 
 

@@ -1,82 +1,85 @@
-#include <cstdio>
-#include <cstdint>
-#include <cstring>
+/**
+ * ESP32-S3 Camera + MobileNetV2 Face/Person Classifier
+ *
+ * Pipeline:
+ *   Camera Capture → Preprocess → MobileNetV2 TFLite Inference → Serial Output
+ *
+ * Output format:
+ *   Team Member 1: 87.3%
+ *   Team Member 2: 5.1%
+ *   Unknown:       7.6%
+ */
 
-// ESP includes
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "nvs_flash.h"
 #include "esp_log.h"
+#include "nvs_flash.h"
 
-// Project includes
-#include "camera.h"
-#include "inference.h"
-#include "model.h"
+#include "camera_pipeline.h"
+#include "classifier.h"
+#include "config.h"
 
+static const char *TAG = "MAIN";
 
-// Static constants and variables
-//static const char* PREDICTION_PREAMBLE = "\n===PREDICTION===\n";
-//static constexpr size_t CHUNK_SIZE = 256;
-
-// Inference
-static uint8_t image_buffer[FRAME_W * FRAME_H * FRAME_C];
-static float prediction[NUM_CLASSES];
-static const char *TAG_INF = "Inference";
-
-void setup()
+extern "C" void app_main(void)
 {
-    // Initialize NVS (required by some drivers)
-    esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    // ── NVS init (required by camera driver) ──────────────────────────────
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
+        ret = nvs_flash_init();
     }
-    ESP_ERROR_CHECK(err);
+    ESP_ERROR_CHECK(ret);
 
-    // Initialize camera
-    if (!camera_init()) {
-        ESP_LOGE(TAG_INF, "Failed to initialize camera!");
-        abort();
-    }
+    ESP_LOGI(TAG, "=== ESP32-S3 Cam Classifier ===");
+    ESP_LOGI(TAG, "Model:      MobileNetV2 (TFLite)");
+    ESP_LOGI(TAG, "Classes:    %s / %s / Unknown", CLASS_LABEL_0, CLASS_LABEL_1);
+    ESP_LOGI(TAG, "Resolution: %dx%d → model input %dx%d",
+             CAM_WIDTH, CAM_HEIGHT, MODEL_INPUT_W, MODEL_INPUT_H);
 
-    // Initialize inference
-    if (!classifier_init())
-    {
-        ESP_LOGE(TAG_INF, "Failed to initialize inference!");
-        abort();
-    }
-}
+    // ── Initialise camera ─────────────────────────────────────────────────
+    ESP_LOGI(TAG, "Initialising camera...");
+    ESP_ERROR_CHECK(camera_pipeline_init());
 
-void loop(void)
-{
-    // Capture frame into tensor
-    if (camera_capture_frame(image_buffer)) {
-  
-        classifier_put_image(image_buffer);
+    // ── Initialise TFLite classifier ─────────────────────────────────────
+    ESP_LOGI(TAG, "Loading MobileNetV2 model...");
+    ESP_ERROR_CHECK(classifier_init());
 
-        if (!classifier_predict(prediction))
-        {
-            ESP_LOGE(TAG_INF, "Failed to invoke interpreter!");
-        }
-        else
-        {
-            // Print output
-            ESP_LOGI(TAG_INF, "tm1: %.2f, tm2: %.2f, unkn: %.2f", prediction[0], prediction[1], prediction[2]);
+    // ── Main inference loop ───────────────────────────────────────────────
+    ESP_LOGI(TAG, "Starting inference loop (every %d ms)\n", INFERENCE_INTERVAL_MS);
 
-        }
-    }
+    ClassifierResult result;
 
-    // Wait ~1 second
-    vTaskDelay(pdMS_TO_TICKS(1000));
-}
-
-// ---------- ESP-IDF entry point ----------
-
-extern "C" void app_main()
-{
-    setup();
-    classifier_init();
     while (true) {
-        loop();
+        // 1. Grab a frame
+        camera_fb_t *fb = camera_pipeline_capture();
+        if (!fb) {
+            ESP_LOGW(TAG, "Camera capture failed, retrying...");
+            vTaskDelay(pdMS_TO_TICKS(100));
+            continue;
+        }
+
+        // 2. Run inference
+        esp_err_t err = classifier_run(fb, &result);
+        camera_pipeline_return(fb);   // always return frame buffer ASAP
+
+        if (err != ESP_OK) {
+            ESP_LOGW(TAG, "Inference error: %s", esp_err_to_name(err));
+            vTaskDelay(pdMS_TO_TICKS(INFERENCE_INTERVAL_MS));
+            continue;
+        }
+
+        // 3. Pretty-print results
+        printf("\n┌─────────────────────────────────┐\n");
+        printf("│  Classification Result          │\n");
+        printf("├─────────────────────────────────┤\n");
+        printf("│  %-14s  %6.1f %%         │\n", CLASS_LABEL_0, result.prob[0] * 100.0f);
+        printf("│  %-14s  %6.1f %%         │\n", CLASS_LABEL_1, result.prob[1] * 100.0f);
+        printf("│  %-14s  %6.1f %%         │\n", "Unknown",     result.prob[2] * 100.0f);
+        printf("├─────────────────────────────────┤\n");
+        printf("│  >> %-28s │\n", result.label);
+        printf("└─────────────────────────────────┘\n");
+
+        vTaskDelay(pdMS_TO_TICKS(INFERENCE_INTERVAL_MS));
     }
 }
