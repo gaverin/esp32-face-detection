@@ -1,4 +1,5 @@
 #include "esp_log.h"
+#include "esp_heap_caps.h"
 #include "model.h"
 
 // Include TFLM
@@ -6,12 +7,13 @@
 #include "tensorflow/lite/micro/micro_interpreter.h"
 
 // Tensor arena size, found by trial and error
-#define TENSOR_ARENA_SIZE (600 * 1024)
+#define TENSOR_ARENA_SIZE   (2 * 1024 * 1024)
 
 // Static variables
 static const tflite::Model *model = nullptr;
 static tflite::MicroInterpreter *interpreter = nullptr;
 //alignas(16) static uint8_t tensor_arena[TENSOR_ARENA_SIZE];
+static uint8_t *s_tensor_arena = nullptr;
 static TfLiteTensor *input = nullptr;
 static TfLiteTensor *output = nullptr;
 static const char *TAG_INF = "Inference";
@@ -23,7 +25,16 @@ static const char *TAG_INF = "Inference";
  * @return True if initialization was successful, false otherwise.
  */
 bool classifier_init()
-{
+{   
+
+    // Allocate tensor arena in PSRAM
+    s_tensor_arena = (uint8_t *)heap_caps_malloc(TENSOR_ARENA_SIZE,
+                                                  MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+    if (!s_tensor_arena) {
+        ESP_LOGE(TAG_INF, "Failed to allocate %u byte tensor arena in PSRAM", TENSOR_ARENA_SIZE);
+        return false;
+    }
+
     // Load TFlite model
     model = tflite::GetModel(model_binary);
     if (model->version() != TFLITE_SCHEMA_VERSION)
@@ -32,7 +43,7 @@ bool classifier_init()
         return false;
     }
     // Create an interpreter
-    static tflite::MicroMutableOpResolver<12> micro_op_resolver;
+    static tflite::MicroMutableOpResolver<14> micro_op_resolver;
 
     // 1. Convolutional Ops    
     micro_op_resolver.AddConv2D();
@@ -54,8 +65,11 @@ bool classifier_init()
     micro_op_resolver.AddDequantize();
     // 8. Multiplication
     micro_op_resolver.AddMul();
+    // 9.
+    micro_op_resolver.AddSub();
+    micro_op_resolver.AddAveragePool2D();
 
-    static tflite::MicroInterpreter static_interpreter(model, micro_op_resolver, tensor_arena, TENSOR_ARENA_SIZE);
+    static tflite::MicroInterpreter static_interpreter(model, micro_op_resolver, s_tensor_arena, TENSOR_ARENA_SIZE);
     interpreter = &static_interpreter;
 
     // Allocate memory for input and output tensors

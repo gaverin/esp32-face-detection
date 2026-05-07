@@ -18,7 +18,7 @@ MODEL_H_PATH = '../inference/esp32/main/model.h'
 class Model:
 
 
-    def __init__(self, lr, img_height=240, img_width=320, num_classes=3, activation_function='softmax'):
+    def __init__(self, lr, img_height=224, img_width=224, num_classes=3, activation_function='softmax'):
 
         self.img_height = img_height
         self.img_width = img_width

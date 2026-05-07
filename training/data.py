@@ -8,7 +8,7 @@ from random import Random
 from PIL import Image
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
-DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "data" / "og_data"
+DEFAULT_SOURCE_DIR = Path(__file__).resolve().parent / "data" / "og_data_224x224"
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent / "data" / "og_data_split"
 DEFAULT_SEED = 42
 
@@ -237,5 +237,5 @@ def resize_images(path):
 if __name__ == "__main__":
     
     #rename_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")
-    #prepare_dataset()
-    resize_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")
+    prepare_dataset()
+    #resize_images("/Users/gab/repos/esp32-face-detection/training/data/og_data")

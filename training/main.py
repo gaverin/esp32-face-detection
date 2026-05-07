@@ -20,9 +20,9 @@ val_image_folder = os.path.join('data','og_data_split', 'val')
 
 
 
-# In the lfw dataset each image is a 250x250 jpg detected and centered using the openCV implementation of Viola-Jones
-IMG_HEIGHT = 240
-IMG_WIDTH = 320
+# We resize frames to 
+IMG_HEIGHT = 224
+IMG_WIDTH = 224
 
 # Training settings
 NUM_CLASSES = 3 

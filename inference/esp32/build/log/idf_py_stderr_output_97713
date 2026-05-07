@@ -1,0 +1,228 @@
+Command: /Users/gab/.espressif/tools/python/v6.0/venv/bin/python /Users/gab/.espressif/v6.0/esp-idf/tools/idf_monitor.py -p /dev/cu.usbmodem1101 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 /Users/gab/repos/esp32-face-detection/inference/esp32/build/camera.elf /Users/gab/repos/esp32-face-detection/inference/esp32/build/bootloader/bootloader.elf -m '/Users/gab/.espressif/tools/python/v6.0/venv/bin/python' '/Users/gab/.espressif/v6.0/esp-idf/tools/idf.py'
+[0;33m--- esp-idf-monitor 1.9.0 on /dev/cu.usbmodem1101 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x40045107: [0;33mets_sha_process[0m[0m in [0;32mROM[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030b4a: [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m170[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030c3b: [0;33mesp_nn_div_by_power_of_two[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/common/common_functions.h[0m[0m:[1;31m135[0m
+[0m--- (inlined by) [0;33mesp_nn_multiply_by_quantized_mult[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/common/common_functions.h[0m[0m:[1;31m145[0m
+[0m--- (inlined by) [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m178[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030b4f: [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m171[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030b16: [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m148[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030bb8: [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m178[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030c15: [0;33mesp_nn_pick_sat_high32_of64[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/common/common_functions.h[0m[0m:[1;31m88[0m
+[0m--- (inlined by) [0;33mesp_nn_sat_round_doubling_high_mul[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/common/common_functions.h[0m[0m:[1;31m107[0m
+[0m--- (inlined by) [0;33mesp_nn_multiply_by_quantized_mult[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/common/common_functions.h[0m[0m:[1;31m144[0m
+[0m--- (inlined by) [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m178[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030b22: [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m168[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x420416c6: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x42041ad8: [0;33mtask_wdt_isr[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x403772c1: [0;33m_xt_lowint1[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1240[0m
+[0m--- 0x42030b41: [0;33mesp_nn_conv_s8_ansi[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_ansi.c[0m[0m:[1;31m168[0m
+[0m--- 0x4202c269: [0;33mesp_nn_conv_s8_esp32s3[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-nn/src/convolution/esp_nn_conv_esp32s3.c[0m[0m:[1;31m424[0m
+[0m--- 0x4201e23e: [0;33mtflite::(anonymous namespace)::Eval(TfLiteContext*, TfLiteNode*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m256[0m
+[0m--- (inlined by) [0;33mEval[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/kernels/esp_nn/conv.cc[0m[0m:[1;31m371[0m
+[0m--- 0x4202554a: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m277[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x42025553: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42025550: [0;33mtflite::MicroInterpreterGraph::InvokeSubgraph(int)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter_graph.cc[0m[0m:[1;31m286[0m
+[0m--- 0x4200d796: [0;33mtflite::MicroInterpreter::Invoke()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/managed_components/espressif__esp-tflite-micro/tensorflow/lite/micro/micro_interpreter.cc[0m[0m:[1;31m294[0m
+[0m--- 0x4200cbfc: [0;33mclassifier_predict(float*)[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/inference.cpp[0m[0m:[1;31m148[0m
+[0m--- 0x4200c815: [0;33mloop()[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m57[0m
+[0m--- 0x4200c899: [0;33mapp_main[0m[0m at [0;32m/Users/gab/repos/esp32-face-detection/inference/esp32/main/main.cpp[0m[0m:[1;31m80[0m
+[0m--- 0x42007c30: [0;33mmain_task[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m199[0m
+[0m--- 0x4204ac7e: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m143[0m
+[0m--- 0x4037bb65: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m165[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32m/Users/gab/.espressif/v6.0/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m

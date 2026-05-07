@@ -1,0 +1,2 @@
+source /Users/gab/repos/esp32-face-detection/predict/build/gdbinit/symbols
+source /Users/gab/repos/esp32-face-detection/predict/build/gdbinit/connect
