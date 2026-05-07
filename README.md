@@ -20,17 +20,26 @@ After training, the model is converted to an `int8` TensorFlow Lite model and ex
 
 ## Usage
 
-1. Change into the `python/` folder and run the Python entry point:
+You can run the full training, build, flash, and monitor pipeline with the helper script from the repository root:
 
 ```bash
-cd python
-uv run python python main.py
+./run-pipeline.sh
 ```
 
-2. Change back out and build the ESP32 firmware:
+You can also run the steps manually (commands for espressif-idf v6, activation might be  different).
+
+1. Change into the `training/` folder and run the training/export pipeline:
+
+```bash
+cd training
+uv run python main.py
+```
+
+2. Change into the ESP32 project and build the firmware:
 
 ```bash
 cd ../inference/esp32
+source ~/.espressif/tools/activate_idf_v6.0.sh
 idf.py build
 ```
 
@@ -40,4 +49,4 @@ idf.py build
 idf.py flash monitor
 ```
 
-This workflow generates the model assets first, then rebuilds and flashes the ESP32 application with the updated model.
+The shell script wraps the same workflow and also shows a small progress indicator while the Python training step runs.

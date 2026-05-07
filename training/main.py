@@ -61,8 +61,8 @@ class_names = test_ds.class_names
 
 # Create model train and evaluate
 face_classifier = Model(lr=LR, img_height=IMG_HEIGHT, img_width=IMG_WIDTH, num_classes=NUM_CLASSES, activation_function=ACTIVATION_FUNCTION)
-face_classifier.train(train_ds=train_ds, epochs=EPOCHS, val_ds=val_ds)
-face_classifier.evaluate_model(test_ds=test_ds)
-face_classifier.export_model_to_tflite(train_ds=train_ds)
+#face_classifier.train(train_ds=train_ds, epochs=EPOCHS, val_ds=val_ds)
+#face_classifier.evaluate_model(test_ds=test_ds)
+#face_classifier.export_model_to_tflite(train_ds=train_ds)
 face_classifier.evaluate_tflite_model(test_ds=test_ds)
 
