@@ -24,7 +24,7 @@ After training, the model is converted to an `int8` TensorFlow Lite model and ex
 
 ```bash
 cd python
-python main.py
+uv run python python main.py
 ```
 
 2. Change back out and build the ESP32 firmware:

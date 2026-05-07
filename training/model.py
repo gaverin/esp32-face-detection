@@ -8,13 +8,6 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 from utils import print_confusion_matrix, write_files
 
-"""
-    Pretrained ResNet50 without its original classification head (include_top=False) act as a feature extractor
-    All its layers are frozen so their weights are not updated during training
-    The GlobalAveragePooling2D layer converts the spatial feature maps into a compact feature vector
-    The Dense layer performs the actual classification, producing one output per class
-    The full model is then compiled with a loss function and optimizer, while callbacks like ModelCheckpoint and EarlyStopping monitor validation performance to save the best model and stop training early
-"""
 
 MODEL_C_PATH = "../inference/esp32/main/model_data.cc"
 MODEL_H_PATH = "../inference/esp32/main/model_data.h"
@@ -195,7 +188,6 @@ class Model:
             def representative_dataset():
                 for images, _ in train_ds.unbatch().shuffle(1000).batch(1).take(200):
                     images = tf.cast(images, tf.float32)
-                    images = keras.applications.mobilenet_v2.preprocess_input(images)
                     yield [images]
 
             converter.optimizations = [tf.lite.Optimize.DEFAULT]
@@ -247,7 +239,7 @@ class Model:
 
         for images, labels in test_ds:
             images = tf.cast(images, tf.float32)
-            images = keras.applications.mobilenet_v2.preprocess_input(images).numpy()
+            images = images.numpy()
             labels = self._labels_to_sparse(labels).numpy()
 
             if input_scale > 0:

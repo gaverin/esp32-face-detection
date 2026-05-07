@@ -71,8 +71,7 @@ static void preprocess(const camera_fb_t *fb, int src_w, int src_h,
             }
 
             auto quantize = [&](uint8_t c) -> int8_t {
-                float norm = ((float)c / 127.5f) - 1.0f;
-                int q = (int)(norm / scale) + zero_point;
+                int q = (int)lroundf(((float)c / scale) + zero_point);
                 return (q < -128) ? -128 : (q > 127) ? 127 : q;
             };
 
