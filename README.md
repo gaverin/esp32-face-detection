@@ -5,7 +5,6 @@ This project trains a small face classifier in TensorFlow/Keras and exports it f
 ## What It Includes
 
 - `training/`: dataset preparation, model training, evaluation, and TensorFlow Lite export
-- `python/`: reference Python workflow used to generate the embedded model assets
 - `inference/esp32/main/`: camera code and generated model files for the embedded app
 - `training/data/og_data_split/`: train, validation, and test folders used by the training pipeline
 
@@ -48,5 +47,3 @@ idf.py build
 ```bash
 idf.py flash monitor
 ```
-
-The shell script wraps the same workflow and also shows a small progress indicator while the Python training step runs.
