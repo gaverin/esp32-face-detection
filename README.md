@@ -7,6 +7,7 @@ This project trains a small face classifier in TensorFlow/Keras and exports it f
 - `training/`: dataset preparation, model training, evaluation, and TensorFlow Lite export
 - `inference/esp32/main/`: camera code and generated model files for the embedded app
 - `training/data/og_data_split/`: train, validation, and test folders used by the training pipeline
+You need to upload your own data and use the methods from the `data.py` module to process and split your dataset
 
 ## Model Pipeline
 
